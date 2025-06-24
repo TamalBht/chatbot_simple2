@@ -2,11 +2,14 @@ import base64
 import os
 from google import genai
 from google.genai import types
+from dotenv import load_dotenv
+load_dotenv()
+api_key = os.getenv("API_KEY")
 
 
 def generate():
     client = genai.Client(
-        api_key="AIzaSyC1ycYj4yGZb4n_b0jJRTQs9YavW1sP0qI",
+        api_key=os.getenv("API_KEY"),
     )
     while True:
         response=input("Enter your response: ")
