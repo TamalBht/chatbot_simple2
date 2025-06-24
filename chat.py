@@ -2,18 +2,39 @@ import base64
 import os
 from google import genai
 from google.genai import types
-import pyttsx3
+from gtts import gTTS
+import tempfile
+import pygame
 
 from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("API_KEY")
 
-engine = pyttsx3.init()
-engine.setProperty('rate', 200)
-engine.setProperty('volume', 1.0)
+from gtts import gTTS
+import tempfile
+import os
+import pygame
+
 def speak(text):
-    engine.say(text)
-    engine.runAndWait()
+    # Create a temp file path without keeping it open
+    tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+    tmp_path = tmp_file.name
+    tmp_file.close()
+
+    # Save gTTS output
+    tts = gTTS(text=text, lang='en', slow=False)
+    tts.save(tmp_path)
+
+    # Initialize and play audio
+    pygame.mixer.init()
+    pygame.mixer.music.load(tmp_path)
+    pygame.mixer.music.play()
+
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
+
+    pygame.mixer.quit()
+    os.remove(tmp_path)
 
 
 def generate():
